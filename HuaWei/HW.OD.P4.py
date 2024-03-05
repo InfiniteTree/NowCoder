@@ -14,7 +14,7 @@
 import sys
 
 case_flag = 0
-t_w = [] # t/w represent the average income rate of each job
+t, w = [], []
 i = 0
 for line in sys.stdin:
     # For the first input line, record the num of original cases
@@ -22,24 +22,22 @@ for line in sys.stdin:
         T, n = int(line.split()[0]), int(line.split()[1])
         case_flag = 1
         continue
-    t_w.append((float(line.split()[1])/float(line.split()[0]), float(line.split()[0]),float(line.split()[1]), i))
+    t.append(int(line.split()[0]))
+    w.append(float(line.split()[1]))
     i+=1
     if i == n: #input done
         break
-    
-t_w.sort(key=lambda x:(x[0],x[1]), reverse=True)
-print(t_w)
 
-# Calculate the max income
-worked = 0
-income = 0
-idx = 0
-while(idx<n):
-    if worked+t_w[idx][1] < T:
-        worked+=t_w[idx][1]
-        income+=t_w[idx][2]
-    idx+=1
-print(income)
+dp = [0] * (T+1)
+for i in range(len(t)):
+    for j in range(T, t[i], -1):
+        dp[j] = max(dp[j], dp[j-t[i]]+w[i])
+
+print("Max income is", dp[-1])
+
+
+
+
 
     
     

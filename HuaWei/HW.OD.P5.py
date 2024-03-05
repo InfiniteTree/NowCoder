@@ -21,3 +21,35 @@ AI 基座。假设当前库存有N 种产品，每种产品的库存量充足，
 5. 100 <= 产品价格<= 20000
 6. 100 <= 采购金额<= 50000
 '''
+import sys
+comb = []
+flag = 0
+# input
+for line in sys.stdin:
+    if flag == 0:
+        amount = float(line.split()[0])
+        flag = 1
+        continue
+    price_str = line.split("\n")[0].strip("[]").split(",")
+    break
+
+# processing
+price = list(map(int, price_str))
+price.sort()
+
+def dfs(amount, price, idx, sum, path, comb):
+    if sum>=amount:
+        if sum == amount:
+            comb.append(path[:])
+        return
+    for i in range(idx, len(price)):
+        path.append(price[i])
+        dfs(amount, price, i, sum+price[i], path, comb)
+        path.pop()
+
+
+dfs(amount, price, 0, 0, [], comb)
+print(comb)
+
+
+    
