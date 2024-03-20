@@ -24,15 +24,83 @@
 输出描述：
 经重新排列后的扑克牌数字列表，每个数字以空格分隔
 '''
+import sys
+
 class solution():
     def problem(self, listN):
-        ret = []
-        mark = 0
-        for i in range(len(listN)-1):
-            if listN[i] == listN[i+1]:        
-        return ret
+        hashmap = [0] * 13
+        for poke in listN:
+            hashmap[poke-1] += 1
+
+        res = []
+        gound = []
+        bomb = []
+        triple = []
+        double = []
+        single = []
+        for i in range(len(hashmap)):
+            while hashmap[i] >= 4:
+                bomb.append(i)
+                hashmap[i] -= 4
+            if  hashmap[i] == 3:
+                triple.append(i)
+                hashmap[i] -= 3
+            elif  hashmap[i] == 2:
+                double.append(i)
+                hashmap[i] -= 2
+            elif hashmap[i] == 1:
+                single.append(i)
+                hashmap[i] -= 1
+        
+        # sorting not reverse for easy poping
+        bomb.sort()
+        triple.sort()
+        double.sort()
+        
+        # build up gound
+        while triple and double:
+            gound.append([triple[-1],double[-1]])
+            triple.pop()
+            double.pop()
+        while len(triple) >= 2:
+            gound.append([triple[-1],triple[-2]])
+            triple.pop()
+            triple.pop()
+            single.append(triple[-1])
+        
+        single.sort()
+
+        # build up the return list
+        for i in range(len(bomb)-1, -1,- 1):
+            for _ in range(4):
+                res.append(bomb[i]+1)
+        
+        for i in range(len(gound)): # not reverse due to the procedure of build it
+            for _ in range(3):
+                res.append(gound[i][0]+1)
+            for _ in range(2):
+                res.append(gound[i][1]+1)
+        
+        for i in range(len(triple)-1, -1,- 1):
+            for _ in range(3):
+                res.append(triple[i]+1)
+        
+        for i in range(len(double)-1, -1,- 1):
+            for _ in range(2):
+                res.append(double[i]+1)
+        
+        for i in range(len(single)-1, -1,- 1):
+            res.append(single[i]+1)
+        
+        print(res)
+        return res
+
 
 case = solution()
-N = []
-N.sort(reverse=True)
+for line in sys.stdin:
+    input = list((line.split()))
+    N = [int(x) for x in input]
+    #print(N)
+    break
+#N = [9, 9, 9, 8, 8, 8, 7, 9, 8, 8, 8, 8, 8, 8, 7, 2, 13, 12, 11, 6, 6, 6, 7, 5, 4, 7, 6, 6, 6, 5, 5, 4, 4, 3, 3, 2, 2, 1, 1]
 case.problem(N)

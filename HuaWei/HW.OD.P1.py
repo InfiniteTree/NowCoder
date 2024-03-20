@@ -25,10 +25,10 @@ class solution:
                 count[0] += 1
                 return
             # Recursion
-            else:
-                for i in range(index, len(arrayN)):
-                    backtrack(count, arrayN, target-arrayN[i], i)
-        count = [0]  # use list instead of int to avoid ...?
+            for i in range(index, len(arrayN)):
+                backtrack(count, arrayN, target-arrayN[i], i)
+                
+        count = [0]  
         backtrack(count, N, M, 0)
         print(count[0])
         return
